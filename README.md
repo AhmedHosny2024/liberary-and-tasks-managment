@@ -1,6 +1,6 @@
 ### library ERD
 
-<image src="library.png" alt="library_erd" style="zoom: 67%;" />
+<image align='center' src="images/liberary.png" alt="library_erd" style="zoom: 67%;" />
 
 ## Explanation of the ERD
 - **Book**: Represents a book in the library. It has attributes like `book_id`, `title`, `author`, `publishedDate`. The `book_id` is the primary key.
