@@ -9,6 +9,8 @@ import { Book } from './books/entity/book.entity';
 import { Loan } from './loans/entity/loan.entity';
 import { UsersModule } from './users/users.module';
 import { BooksModule } from './books/books.module';
+import { TasksModule } from './tasks/tasks.module';
+import { Task } from './tasks/entity/tasks.entity';
 
 @Module({
   imports: [
@@ -23,12 +25,13 @@ import { BooksModule } from './books/books.module';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, Book, Loan],
+      entities: [User, Book, Loan, Task],
       synchronize: true,
     }),
     LoansModule,
     UsersModule,
     BooksModule,
+    TasksModule,
   ],
 })
 export class AppModule {}

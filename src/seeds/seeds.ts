@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 import { User } from '../users/entity/user.entity';
 import { Book } from '../books/entity/book.entity';
 import { Loan } from '../loans/entity/loan.entity';
+import { Task, TaskStatus } from '../tasks/entity/tasks.entity';
 import { faker } from '@faker-js/faker';
 
 async function bootstrap() {
@@ -13,6 +14,7 @@ async function bootstrap() {
   const userRepo = dataSource.getRepository(User);
   const bookRepo = dataSource.getRepository(Book);
   const loanRepo = dataSource.getRepository(Loan);
+  const taskRepo = dataSource.getRepository(Task);
 
   // 🔹 1. Create 20 users
   const users: User[] = [];
@@ -52,6 +54,21 @@ async function bootstrap() {
     });
 
     await loanRepo.save(loan);
+  }
+
+  const tasks: Task[] = [];
+  for (let i = 0; i < 20; i++) {
+    const task = taskRepo.create({
+      title: faker.lorem.sentence(),
+      description: faker.lorem.paragraph(),
+      dueDate: faker.date.future(),
+      priority: (i % 5) + 1,
+      status: faker.helpers.arrayElement([
+        TaskStatus.TODO,
+        TaskStatus.COMPLETED,
+      ]),
+    });
+    tasks.push(await taskRepo.save(task));
   }
 
   console.log('✅ Seed data created');
