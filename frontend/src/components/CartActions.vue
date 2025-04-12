@@ -31,7 +31,6 @@
     @close="handleModalClose"
     :disableEdit="false"
     :key="isEditModalOpen"
-    @edit="editData"
   />
 
 </template>
@@ -40,6 +39,7 @@
 import TaskModel from './TaskModel.vue'
 import { ref } from 'vue'
 import axiosInstant from '../server/server.js'
+import { useTaskStore } from '../stores/taskStore'
 
 const props = defineProps({
   cart: {
@@ -51,8 +51,8 @@ const props = defineProps({
 const menuOpen = ref(false)
 const isEditModalOpen = ref(false)
 const isViewModalOpen = ref(false)
+const taskStore = useTaskStore()
 
-const emit = defineEmits(['delete', 'edit'])
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
@@ -68,7 +68,7 @@ const deleteTask = async () => {
     const res = await axiosInstant.delete(`tasks/${props.cart.id}`)
     if (res.status === 200) {
       menuOpen.value = false
-      emit('delete', props.cart.id)
+      taskStore.removeTask(props.cart.id)
     } else {
       console.error('Failed to delete task')
     }
@@ -82,10 +82,6 @@ function editCart() {
   menuOpen.value = false
 }
 
-function editData(data) {
-  isEditModalOpen.value = false
-  emit('edit', data)
-}
 
 function handleModalClose() {
   isViewModalOpen.value = false

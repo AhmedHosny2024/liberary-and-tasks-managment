@@ -45,6 +45,8 @@
 <script setup>
 import { ref } from 'vue'
 import axiosInstant from '../server/server.js'
+import { useTaskStore } from '../stores/taskStore'
+
 const props = defineProps({
   cart: {
     type: Object,
@@ -63,7 +65,9 @@ const props = defineProps({
     default: false
   }
 })
-const emit = defineEmits(['close','add','edit'])
+const taskStore = useTaskStore()
+
+const emit = defineEmits(['close'])
 const opened = ref(props.open) 
 const editableCart = ref({ ...props.cart })
 const disableEdit = ref(props.disableEdit) 
@@ -88,7 +92,7 @@ const updateCart=async () => {
       const response = await axiosInstant.post('tasks', editableCart.value)
       if (response.status === 201 || response.status === 200) {
         console.log('New task created successfully:', response.data)
-        emit('add', response.data)
+        taskStore.addTask(response.data)
       } else {
         console.error('Failed to create new task:', response.statusText)
       }
@@ -101,7 +105,7 @@ const updateCart=async () => {
       const response = await axiosInstant.patch(`tasks/${props.cart.id}`, editableCart.value)
       if (response.status === 200) {
         console.log('Task updated successfully:', response.data)
-        emit('edit', response.data)
+        taskStore.updateTask(response.data)
       } else {
         console.error('Failed to update task:', response.statusText)
       }

@@ -18,12 +18,10 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 gap-4 p-4 rounded-lg">
           <CartItem
             v-for="task in tasks"
-            :key="task.id"
+            :key="task?.id + task.status"
             :cart=task
             class="mb-4"
-            @markCompleted="markCompleted"
-            @delete="removeItem"
-            @edit="editItem"
+            @updateTaskStatus="fetchTasks"
           />
         </div>
       </div>
@@ -46,7 +44,6 @@
       :disableEdit="false" 
       :key="addNewTask"
       :newTask="true"
-      @add="addData"
     />
 
   </div>
@@ -57,8 +54,11 @@ import CartItem from './CartItem.vue'
 import TaskModel from './TaskModel.vue'
 import { ref, onMounted } from 'vue'
 import axiosInstant from '../server/server.js'
+import { useTaskStore } from '../stores/taskStore'
+import { computed } from 'vue'
 
-const tasks = ref([])
+const taskStore = useTaskStore()
+const tasks = computed(() => taskStore.tasks)
 const addNewTask = ref(false)
 const pagesize = ref(0)
 const limit = ref(5)
@@ -83,31 +83,16 @@ function openModel() {
   addNewTask.value = true
 }
 
+
 const fetchTasks = async () => {
   try {
     const response = await axiosInstant.get(`tasks?page=${currentPage.value}&limit=${limit.value}&status=${statusFilter.value}`)
-    tasks.value = response.data.data
+    // tasks.value = response.data.data
     pagesize.value = response.data.total / limit.value
+    taskStore.setTasks(response.data.data)
+
   } catch (error) {
     console.error('Error fetching tasks:', error)
-  }
-}
-
-const markCompleted = () => {
-  fetchTasks()
-}
-const removeItem = async (id) => {
-  tasks.value = tasks.value.filter(task => task.id !== id)
-}
-
-const addData = async (data) => {
-  tasks.value.push(data)
-  addNewTask.value = false
-}
-const editItem = async (data) => {
-  const index = tasks.value.findIndex(task => task.id === data.id)
-  if (index !== -1) {
-    tasks.value[index] = data
   }
 }
 
