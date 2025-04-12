@@ -5,17 +5,24 @@
 - tailwindcss
 
 ### Features
-<img src ='frontend/images/home.png' width='300' height='200' alt='home' align='left'>
+- Home
+  <br/>
+  <img src ='images/home.png' width='300' height='200' alt='home' />
 - Add task
-<img src ='frontend/images/add.png' width='300' height='200' alt='add' align='left'>
+  <br/>
+  <img src ='images/add.png' width='300' height='200' alt='add' />
 - Edit task
-<img src ='frontend/images/edit.png' width='300' height='200' alt='edit' align='left'>
+  <br/>
+  <img src ='images/edit.png' width='300' height='200' alt='edit' />
 - Delete task
-<img src ='frontend/images/actions.png' width='300' height='200' alt='actions' align='left'> 
+  <br/>
+  <img src ='images/actions.png' width='300' height='200' alt='actions' /> 
 - Filter task
-<img src ='frontend/images/filter.png' width='300' height='200' alt='filter' align='left'>
+  <br/>
+  <img src ='images/filter.png' width='300' height='200' alt='filter'/>
 - responsive design
-<img src ='frontend/images/responsive.png' width='300' height='200' alt='responsive' align='left'>
+  <br/>
+  <img src ='images/responsive.png' width='300' height='200' alt='responsive'/>
 
 ## Project Setup
 
