@@ -12,6 +12,7 @@ import {
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entity/tasks.entity';
+import { TotalTasksDto } from './dto/total-tasks.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -32,7 +33,7 @@ export class TasksController {
     @Query('page') page: string,
     @Query('limit') limit: string,
     @Query('status') status: string,
-  ): Promise<Task[]> {
+  ): Promise<TotalTasksDto> {
     try {
       const pageNumber = parseInt(page, 10) || 1;
       const limitNumber = parseInt(limit, 10) || 10;

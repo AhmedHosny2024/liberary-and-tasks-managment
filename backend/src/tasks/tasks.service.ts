@@ -5,6 +5,7 @@ import { Task, TaskStatus } from './entity/tasks.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Logger } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
+import { TotalTasksDto } from './dto/total-tasks.dto';
 
 @Injectable()
 export class TasksService {
@@ -39,7 +40,7 @@ export class TasksService {
     page: number = 1,
     limit: number = 10,
     status?: string,
-  ): Promise<Task[]> {
+  ): Promise<TotalTasksDto> {
     const request_id = uuid();
     this.logger.log(`Request ID: ${request_id} - Get all tasks`);
     try {
@@ -50,7 +51,7 @@ export class TasksService {
       }
       filters.skip = (page - 1) * limit;
       filters.take = limit;
-      const res = await this.tasksRepository.find({
+      const [data, total] = await this.tasksRepository.findAndCount({
         where: filters.status ? { status: filters.status } : {},
         skip: filters.skip,
         take: filters.take,
@@ -60,10 +61,10 @@ export class TasksService {
           filters,
         )} with time taken: ${Date.now() - startTime}ms`,
       );
-      if (!res) {
-        return [];
-      }
-      return res;
+      return {
+        total: total,
+        data: data,
+      };
     } catch (error) {
       this.logger.error(
         `Request ID: ${request_id} - Error fetching tasks`,
