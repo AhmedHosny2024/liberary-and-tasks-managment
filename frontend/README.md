@@ -1,14 +1,21 @@
-# vue
+# Frontend
+### Tech Stack
+- Vue 3
+- axios
+- tailwindcss
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Features
+<img src ='images/home.png' width='300' height='200' alt='home' align='left'>
+- Add task
+<img src ='images/add.png' width='300' height='200' alt='add' align='left'>
+- Edit task
+<img src ='images/edit.png' width='300' height='200' alt='edit' align='left'>
+- Delete task
+<img src ='images/actions.png' width='300' height='200' alt='actions' align='left'> 
+- Filter task
+<img src ='images/filter.png' width='300' height='200' alt='filter' align='left'>
+- responsive design
+<img src ='images/responsive.png' width='300' height='200' alt='responsive' align='left'>
 
 ## Project Setup
 
