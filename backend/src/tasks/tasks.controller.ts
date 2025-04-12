@@ -62,6 +62,18 @@ export class TasksController {
       throw new BadRequestException('Error marking task as complete');
     }
   }
+  @Patch(`:id`)
+  async updateTask(
+    @Param('id') id: string,
+    @Body() updateTaskDto: Partial<CreateTaskDto>,
+  ): Promise<Task> {
+    try {
+      const res = await this.tasksService.updateTask(Number(id), updateTaskDto);
+      return res;
+    } catch (error) {
+      throw new BadRequestException('Error updating task');
+    }
+  }
 
   @Delete(':id')
   async deleteTask(@Param('id') id: number): Promise<void> {

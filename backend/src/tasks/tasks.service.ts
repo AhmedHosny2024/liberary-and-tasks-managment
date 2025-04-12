@@ -91,6 +91,26 @@ export class TasksService {
     }
   }
 
+  async updateTask(
+    id: number,
+    updateTaskDto: Partial<CreateTaskDto>,
+  ): Promise<Task> {
+    const request_id = uuid();
+    this.logger.log(`Request ID: ${request_id} - Update task`);
+    try {
+      const task = await this.tasksRepository.findOne({ where: { id } });
+      if (!task) {
+        throw new BadRequestException('Task not found');
+      }
+      Object.assign(task, updateTaskDto);
+      await this.tasksRepository.save(task);
+      return task;
+    } catch (error) {
+      this.logger.error(`Error updating task`, error.stack);
+      throw new BadRequestException('Error updating task');
+    }
+  }
+
   async deleteTask(id: number): Promise<void> {
     const request_id = uuid();
     this.logger.log(`Request ID: ${request_id} - Delete task`);

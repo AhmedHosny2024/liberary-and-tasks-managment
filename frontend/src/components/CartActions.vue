@@ -1,6 +1,5 @@
 <template>
   <div class="flex justify-between items-center z-20">
-    <!-- 3 Dots Vertical Button -->
     <div class="relative">
       <button @click="toggleMenu" class="flex flex-col items-center space-y-1">
         <span class="block w-1 h-1 bg-gray-500 rounded-full"></span>
@@ -8,19 +7,17 @@
         <span class="block w-1 h-1 bg-gray-500 rounded-full"></span>
       </button>
 
-      <!-- Menu -->
       <div v-if="menuOpen" class="absolute right-0 bg-white border border-gray-300 rounded-lg shadow-lg w-max mt-2 z-10">
         <ul class="text-sm">
           <li @click="viewCart" class="px-4 py-2 cursor-pointer hover:bg-gray-100">View</li>
           <li @click="editCart" class="px-4 py-2 cursor-pointer hover:bg-gray-100" v-if="cart.status!=='completed'">Edit</li>
-          <li @click="deleteAll" class="px-4 py-2 cursor-pointer hover:bg-red-500 hover:text-white">Delete</li>
+          <li @click="deleteTask" class="px-4 py-2 cursor-pointer hover:bg-red-500 hover:text-white">Delete</li>
         </ul>
       </div>
     </div>
   </div>
 
 
-  <!-- Modal for Editing Cart -->
   <TaskModel
     v-if="isViewModalOpen"
     :cart="cart"
@@ -34,6 +31,7 @@
     @close="handleModalClose"
     :disableEdit="false"
     :key="isEditModalOpen"
+    @edit="editData"
   />
 
 </template>
@@ -41,26 +39,21 @@
 <script setup>
 import TaskModel from './TaskModel.vue'
 import { ref } from 'vue'
+import axiosInstant from '../server/server.js'
 
-// Props
 const props = defineProps({
   cart: {
     type: Object,
     required: true
   },
-  markCompleted: {
-    type: Function,
-    required: true
-  }
 })
 
-// State
 const menuOpen = ref(false)
 const isEditModalOpen = ref(false)
 const isViewModalOpen = ref(false)
 
+const emit = defineEmits(['delete', 'edit'])
 
-// Methods
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
 }
@@ -70,10 +63,18 @@ function viewCart() {
   menuOpen.value = false
 }
 
-function deleteAll() {
-  // Handle delete all action
-  console.log('Deleting all items')
-  // Add logic for deleting all items in the cart
+const deleteTask = async () => {
+  try {
+    const res = await axiosInstant.delete(`tasks/${props.cart.id}`)
+    if (res.status === 200) {
+      menuOpen.value = false
+      emit('delete', props.cart.id)
+    } else {
+      console.error('Failed to delete task')
+    }
+  } catch (error) {
+    console.error('Error deleting task:', error)
+  }
 }
 
 function editCart() {
@@ -81,8 +82,12 @@ function editCart() {
   menuOpen.value = false
 }
 
+function editData(data) {
+  isEditModalOpen.value = false
+  emit('edit', data)
+}
+
 function handleModalClose() {
-  // Handle the close event from TaskModel
   isViewModalOpen.value = false
   isEditModalOpen.value = false
 }

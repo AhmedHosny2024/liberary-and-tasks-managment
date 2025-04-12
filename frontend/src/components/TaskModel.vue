@@ -3,27 +3,35 @@
     <div class="bg-white p-6 rounded-lg shadow-lg w-[45rem]" @click.stop>
       <h3 class="text-xl mb-4 font-semibold">Task details</h3>
 
-      <!-- Form to edit cart data -->
       <form @submit.prevent="updateCart">
         <div class="mb-4">
           <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-          <input v-model="editableCart.title" id="title" type="text" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit"  />
+          <input v-model="editableCart.title" id="title" type="text" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit"  required/>
         </div>
         <div class="mb-4">
           <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
-          <input v-model="editableCart.priority" id="priority" type="text" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit" />
+          <input v-model="editableCart.priority" id="priority" type="number" min="1" max="5" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit" required/>
         </div>
         <div class="mb-4">
           <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-          <textarea v-model="editableCart.description" id="description" class="w-full p-2 mt-1 border border-gray-300 rounded" rows="4" :readonly="disableEdit" ></textarea>
+          <textarea v-model="editableCart.description" id="description" class="w-full p-2 mt-1 border border-gray-300 rounded" rows="4" :readonly="disableEdit" required></textarea>
         </div>
         <div class="mb-4">
           <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-          <input v-model="editableCart.status" id="status" type="text" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit" />
+          <select
+            v-model="editableCart.status"
+            id="status"
+            class="w-full p-2 mt-1 border border-gray-300 rounded"
+            :disabled="disableEdit"
+            required
+          >
+            <option value="todo">To Do</option>
+            <option value="completed">Completed</option>
+          </select>
         </div>
         <div class="mb-4">
           <label for="dueDate" class="block text-sm font-medium text-gray-700">Due Date</label>
-          <input v-model="editableCart.dueDate" id="dueDate" type="date" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit" />
+          <input v-model="editableCart.dueDate" :min="today" id="dueDate" type="date" class="w-full p-2 mt-1 border border-gray-300 rounded" :readonly="disableEdit" required/>
         </div>
         <div class="flex justify-end space-x-2">
           <button @click="closeEditModal" type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
@@ -36,10 +44,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import axiosInstant from '../server/server.js'
 const props = defineProps({
   cart: {
     type: Object,
-    required: true
+    required: false
   },
   disableEdit: {
     type: Boolean,
@@ -54,34 +63,54 @@ const props = defineProps({
     default: false
   }
 })
-const emit = defineEmits(['close'])
-const opened = ref(props.open) // State to control the modal visibility
-const editableCart = ref({ ...props.cart }) // Create a copy of the cart for editing
-const disableEdit = ref(props.disableEdit) // Disable edit mode if prop is true
+const emit = defineEmits(['close','add','edit'])
+const opened = ref(props.open) 
+const editableCart = ref({ ...props.cart })
+const disableEdit = ref(props.disableEdit) 
+const today = new Date().toISOString().split('T')[0] 
 
 function closeEditModal() {
   opened.value = false
   console.log(disableEdit)
-  emit('close') // Emit close event to parent component
+  emit('close')
 }
 function handleOutsideClick(event) {
   const modalElement = event.target.closest('.bg-white')
   if (!modalElement) {
-    closeEditModal() // Close the modal if click is outside
+    closeEditModal() 
   }
 }
 
-function updateCart() {
-  // Handle saving the updated cart
+const updateCart=async () => {
   if(props.newTask){
-    // Logic to add a new task
     console.log('New task data:', editableCart.value)
+    try {
+      const response = await axiosInstant.post('tasks', editableCart.value)
+      if (response.status === 201 || response.status === 200) {
+        console.log('New task created successfully:', response.data)
+        emit('add', response.data)
+      } else {
+        console.error('Failed to create new task:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error creating new task:', error)
+    }
   } else {
-    // Logic to update an existing task
     console.log('Updated task data:', editableCart.value)
+    try {
+      const response = await axiosInstant.patch(`tasks/${props.cart.id}`, editableCart.value)
+      if (response.status === 200) {
+        console.log('Task updated successfully:', response.data)
+        emit('edit', response.data)
+      } else {
+        console.error('Failed to update task:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error updating task:', error)
+    }
   }
-  // You can emit the updated data or call a method to update the cart in a parent component
   closeEditModal()
+
 }
 
 </script>

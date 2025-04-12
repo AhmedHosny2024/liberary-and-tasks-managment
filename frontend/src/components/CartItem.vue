@@ -4,7 +4,7 @@
         <h2 class="text-2xl font-bold">{{ cart.title }}</h2>
         <div class="flex justify-between items-center min-w-fit gap-4 ml-4">
           <span :class="`text-black text-md  rounded-full bg-white py-1 px-3`">{{ cart.priority }}</span>
-          <CartActions :cart="cart" />
+          <CartActions :cart="cart"  @delete="removeItem" @edit="editItem"/>
         </div>
       </div>
       <span class="text-gray-500 text-md">{{ cart.dueDate }}</span>
@@ -32,24 +32,34 @@
 <script setup>
 import CartActions from './CartActions.vue'
 import {defineProps} from 'vue'
-import axios from 'axios'
-const emit = defineEmits(['close'])
+import axiosInstant from '../server/server.js'
+const emit = defineEmits(['markCompleted', 'delete'])
 
 const props = defineProps({
   cart: {
     type: Object,
     required: true
   },
-  markCompleted: {
-    type: Function,
-    required: true
-  }
 })
 const bg = props.cart.status === 'completed' ? 'bg-green-200' : 'bg-red-200'
 const tg = props.cart.status === 'completed' ? 'bg-green-500' : 'bg-red-500'
 
 const markCompleted = async (id) => {
-  await axios.put(`/api/tasks/${id}`, { status: 'completed' })
-  emit('markCompleted')
+  try {
+    const response = await axiosInstant.patch(`tasks/${id}/complete`)
+    if (response.status === 200) {
+      emit('markCompleted')
+    } else {
+      console.error('Failed to mark task as completed:', response.statusText)
+    }
+  } catch (error) {
+    console.error('Error marking task as completed:', error)
+  }
+}
+const removeItem =  (id) => {
+  emit('delete', id)
+}
+const editItem =  (id) => {
+  emit('edit', id)
 }
 </script>
