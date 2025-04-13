@@ -4,7 +4,7 @@ import { Loan } from '../../loans/entity/loan.entity';
 @Entity()
 export class Book {
   @PrimaryGeneratedColumn()
-  book_id: number;
+  id: number;
 
   @Column()
   title: string;

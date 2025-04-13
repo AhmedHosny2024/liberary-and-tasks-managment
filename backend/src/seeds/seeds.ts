@@ -42,15 +42,17 @@ async function bootstrap() {
     const user = faker.helpers.arrayElement(users);
     const book = faker.helpers.arrayElement(books);
     const borrowed_at = faker.date.recent({ days: 180 }); // last 6 months
-    const returnDate = faker.datatype.boolean()
-      ? faker.date.between({ from: borrowed_at, to: new Date() })
-      : null;
-
+    const returnDate = faker.date.between({
+      from: borrowed_at,
+      to: new Date(),
+    });
+    const isReturned = faker.datatype.boolean();
     const loan = loanRepo.create({
       user,
       book,
       borrowed_at,
       returnDate,
+      isReturned,
     });
 
     await loanRepo.save(loan);

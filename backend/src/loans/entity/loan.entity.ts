@@ -28,4 +28,7 @@ export class Loan {
 
   @Column({ nullable: true })
   returnDate: Date;
+
+  @Column({ default: false })
+  isReturned: boolean;
 }
