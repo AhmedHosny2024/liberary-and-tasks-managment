@@ -11,6 +11,8 @@
 
 - **Loan**: Represents the relation between user and book. It has attributes like `loan_id`, `borrowed_at`, `returnDate`, `return_date`, `user` and `book` . The `loan_id` is the primary key.
 
+- we add composite index om `borrowed_at` and `book` to speed up the query to get the books borrowed by a user.
+
 ### Hoe to run the code
 * add .env file containing the following variables:
 ```bash
