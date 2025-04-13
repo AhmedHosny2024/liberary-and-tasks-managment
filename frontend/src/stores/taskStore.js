@@ -11,7 +11,8 @@ export const useTaskStore = defineStore('taskStore', {
     updateTask(id, updatedData) {
       const index = this.tasks.findIndex(t => t.id === id)
       if (index !== -1) {
-        this.tasks[index] = { ...this.tasks[index], ...updatedData }
+        const updatedTask = { ...this.tasks[index], ...updatedData }
+        this.tasks.splice(index, 1, updatedTask)
       }
     },
     updateTaskStatus(id, status) {

@@ -9,7 +9,7 @@
       </div>
       <span class="text-gray-500 text-md">{{ cart.dueDate }}</span>
       <p class="mt-2 mb-4">
-        {{ cart.description }}
+        {{ props.cart.description.length > 200 ? props.cart.description.slice(0, 200) + '...' : props.cart.description }}
       </p>
       <div class="flex justify-between items-center">
         <div
@@ -34,7 +34,6 @@ import CartActions from './CartActions.vue'
 import {defineProps} from 'vue'
 import axiosInstant from '../server/server.js'
 import { useTaskStore } from '../stores/taskStore'
-
 const props = defineProps({
   cart: {
     type: Object,
@@ -45,6 +44,8 @@ const props = defineProps({
     default: ''
   }
 })
+
+
 const taskStore = useTaskStore()
 const emit = defineEmits(['updateTaskStatus'])
 const bg = props.cart.status === 'completed' ? 'bg-green-200' : 'bg-red-200'

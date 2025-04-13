@@ -105,6 +105,7 @@ const updateCart=async () => {
       const response = await axiosInstant.patch(`tasks/${props.cart.id}`, editableCart.value)
       if (response.status === 200) {
         console.log('Task updated successfully:', response.data)
+        Object.assign(props.cart, editableCart.value)
         taskStore.updateTask(response.data)
       } else {
         console.error('Failed to update task:', response.statusText)
