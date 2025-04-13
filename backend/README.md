@@ -13,6 +13,8 @@
 
 - we add composite index om `borrowed_at` and `book` to speed up the query to get the books borrowed by a user.
 
+- feature to add: user redis to cache top borrowed books for 1 day instead of calling the query each time.
+
 ### Hoe to run the code
 * add .env file containing the following variables:
 ```bash
