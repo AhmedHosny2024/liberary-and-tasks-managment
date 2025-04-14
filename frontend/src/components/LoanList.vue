@@ -65,9 +65,9 @@ import LoanCard from './LoanCard.vue'
 import LoanModal from './LoanModal.vue'
 import { ref, computed, onMounted } from 'vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store'
 
-const loanStore = useTaskStore()
+const loanStore = useStore()
 const loans = computed(() => loanStore.loans)
 const showNewLoan = ref(false)
 const pagesize = ref(0)

@@ -42,7 +42,7 @@ import axiosInstant from '../server/server.js'
 
 const books = ref([])
 
-const featchBooks = async () => {
+const fetchBooks = async () => {
   try {
     const response = await axiosInstant.get('loans/top-borrowed')
     books.value = response.data
@@ -57,7 +57,7 @@ const formatDate = (dateStr) => {
 }
 
 onMounted(() => {
-  featchBooks()
+  fetchBooks()
 })
 
 </script>

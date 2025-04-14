@@ -45,7 +45,7 @@
 <script setup>
 import { ref } from 'vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store.js'
 
 const props = defineProps({
   cart: {
@@ -65,7 +65,7 @@ const props = defineProps({
     default: false
   }
 })
-const taskStore = useTaskStore()
+const taskStore = useStore()
 
 const emit = defineEmits(['close'])
 const opened = ref(props.open) 

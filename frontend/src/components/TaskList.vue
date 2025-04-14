@@ -16,7 +16,7 @@
     <section class="pb-4 pt-2">
       <div class="container-xl lg:container m-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-col-3 gap-4 p-4 rounded-lg">
-          <CartItem
+          <TaskCard
             v-for="task in tasks"
             :key="task?.id + task.status"
             :cart=task
@@ -43,7 +43,7 @@
       </button>
     </div>
 
-    <TaskModel
+    <TaskModal
       v-if="addNewTask"
       @close="handleModalClose"
       :disableEdit="false" 
@@ -55,14 +55,14 @@
 </template>
 
 <script setup>
-import CartItem from './CartItem.vue'
-import TaskModel from './TaskModel.vue'
+import TaskCard from './TaskCard.vue'
+import TaskModal from './TaskModal.vue'
 import { ref, onMounted } from 'vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store'
 import { computed } from 'vue'
 
-const taskStore = useTaskStore()
+const taskStore = useStore()
 const tasks = computed(() => taskStore.tasks)
 const addNewTask = ref(false)
 const pagesize = ref(0)

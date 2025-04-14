@@ -18,14 +18,14 @@
   </div>
 
 
-  <TaskModel
+  <TaskModal
     v-if="isViewModalOpen"
     :cart="cart"
     @close="handleModalClose"
     :disableEdit="true" 
     :key="isViewModalOpen"
   />
-  <TaskModel 
+  <TaskModal 
     v-else-if="isEditModalOpen" 
     :cart="cart" 
     @close="handleModalClose"
@@ -36,10 +36,10 @@
 </template>
 
 <script setup>
-import TaskModel from './TaskModel.vue'
+import TaskModal from './TaskModal.vue'
 import { ref } from 'vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store'
 
 const props = defineProps({
   cart: {
@@ -51,7 +51,7 @@ const props = defineProps({
 const menuOpen = ref(false)
 const isEditModalOpen = ref(false)
 const isViewModalOpen = ref(false)
-const taskStore = useTaskStore()
+const taskStore = useStore()
 
 
 function toggleMenu() {

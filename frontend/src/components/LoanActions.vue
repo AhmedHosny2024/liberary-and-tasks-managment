@@ -39,7 +39,7 @@
 import { ref } from 'vue'
 import LoanModal from './LoanModal.vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store'
 
 const props = defineProps({
   loan: {
@@ -54,7 +54,7 @@ console.log(loan.value)
 const menuOpen = ref(false)
 const isViewModalOpen = ref(false)
 const isEditModalOpen = ref(false)
-const loanStore = useTaskStore()
+const loanStore = useStore()
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value

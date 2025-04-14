@@ -48,7 +48,7 @@
 import { defineProps, defineEmits } from 'vue'
 import axiosInstant from '../server/server.js'
 import LoanActions from './LoanActions.vue'
-import { useTaskStore } from '../stores/taskStore' 
+import { useStore } from '../stores/store.js' 
 
 const props = defineProps({
   loan: {
@@ -58,7 +58,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['updateLoanStatus'])
-const loanStore = useTaskStore()
+const loanStore = useStore()
 
 const bg = props.loan.isReturned ? 'bg-green-200' : 'bg-red-200'
 const tagColor = props.loan.isReturned ? 'bg-green-500' : 'bg-red-500'

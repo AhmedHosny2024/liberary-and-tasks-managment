@@ -4,7 +4,7 @@
         <h2 class="text-2xl font-bold">{{ cart.title }}</h2>
         <div class="flex justify-between items-center min-w-fit gap-4 ml-4">
           <span :class="`text-black text-md  rounded-full bg-white py-1 px-3`">{{ cart.priority }}</span>
-          <CartActions :cart="cart" />
+          <TaskActions :cart="cart" />
         </div>
       </div>
       <span class="text-gray-500 text-md">{{ cart.dueDate }}</span>
@@ -30,10 +30,10 @@
 
 
 <script setup>
-import CartActions from './CartActions.vue'
+import TaskActions from './TaskActions.vue'
 import {defineProps} from 'vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store'
 const props = defineProps({
   cart: {
     type: Object,
@@ -46,7 +46,7 @@ const props = defineProps({
 })
 
 
-const taskStore = useTaskStore()
+const taskStore = useStore()
 const emit = defineEmits(['updateTaskStatus'])
 const bg = props.cart.status === 'completed' ? 'bg-green-200' : 'bg-red-200'
 const tg = props.cart.status === 'completed' ? 'bg-green-500' : 'bg-red-500'

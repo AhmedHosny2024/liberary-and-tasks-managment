@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 
-export const useTaskStore = defineStore('taskStore', {
+export const useStore = defineStore('MainStore', {
   state: () => ({
     tasks: [],
     loans: [],
   }),
   actions: {
+    // Task actions
     setTasks(newTasks) {
       this.tasks = newTasks
     },
@@ -29,8 +30,7 @@ export const useTaskStore = defineStore('taskStore', {
       this.tasks = this.tasks.filter(t => t.id !== id)
     },
 
-
-
+    // Loan actions
     setLoans(newLoans) {
       this.loans = newLoans
     },

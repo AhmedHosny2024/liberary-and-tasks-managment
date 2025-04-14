@@ -42,7 +42,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axiosInstant from '../server/server.js'
-import { useTaskStore } from '../stores/taskStore'
+import { useStore } from '../stores/store.js'
 
 const props = defineProps({
   disableEdit: {
@@ -63,7 +63,7 @@ const props = defineProps({
   }
 })
 
-const loanStore = useTaskStore()
+const loanStore = useStore()
 
 const emit = defineEmits(['close'])
 
