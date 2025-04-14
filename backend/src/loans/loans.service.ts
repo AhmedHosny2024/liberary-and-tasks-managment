@@ -29,7 +29,13 @@ export class LoansService {
     try {
       const topBorrowedBooks = await this.loanRepo
         .createQueryBuilder('l')
-        .select('b.id, b.title, COUNT(l.loan_id) AS borrow_count')
+        .select([
+          'b.id AS book_id',
+          'b.title AS title',
+          'b.author AS author',
+          'b.publishedDate AS publishedDate',
+          'COUNT(l.loan_id) AS borrow_count',
+        ])
         .where('l.returnDate IS NOT NULL')
         .andWhere('l.borrowed_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)')
         .innerJoin('l.book', 'b')
@@ -133,7 +139,10 @@ export class LoansService {
       filters.take = limit ? limit : 10;
       const startTime = Date.now();
       const [data, total] = await this.loanRepo.findAndCount({
-        where: filters.isReturned ? { isReturned: filters.isReturned } : {},
+        where:
+          filters.isReturned !== null && filters.isReturned !== undefined
+            ? { isReturned: filters.isReturned }
+            : {},
         skip: filters.skip,
         take: filters.take,
         relations: ['user', 'book'],
@@ -228,10 +237,18 @@ export class LoansService {
         where: { loan_id: id },
         relations: ['user', 'book'],
       });
-      if (!loan) {
-        throw new NotFoundException(`Loan with ID ${id} not found`);
+      const user = await this.userService.findOne(dto.user_id);
+      const book = await this.bookService.findOne(dto.book_id);
+      if (!user || !book || !loan) {
+        throw new NotFoundException('User or Book not found');
       }
-      Object.assign(loan, dto);
+      Object.assign(loan, {
+        returnDate: dto.returnDate ?? loan.returnDate,
+        user: user ?? loan.user,
+        book: book ?? loan.book,
+        borrowed_at: loan.borrowed_at,
+        isReturned: loan.isReturned,
+      });
       const res = await this.loanRepo.save(loan);
       if (!res) {
         this.logger.warn(`Request ID: ${request_id} - Loan data is invalid`);

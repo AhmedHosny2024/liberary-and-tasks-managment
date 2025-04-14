@@ -6,6 +6,7 @@ import { Book } from '../books/entity/book.entity';
 import { Loan } from '../loans/entity/loan.entity';
 import { Task, TaskStatus } from '../tasks/entity/tasks.entity';
 import { faker } from '@faker-js/faker';
+import { format } from 'date-fns';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -42,10 +43,11 @@ async function bootstrap() {
     const user = faker.helpers.arrayElement(users);
     const book = faker.helpers.arrayElement(books);
     const borrowed_at = faker.date.recent({ days: 180 }); // last 6 months
-    const returnDate = faker.date.between({
+    const returnDateRow = faker.date.between({
       from: borrowed_at,
       to: new Date(),
     });
+    const returnDate = format(returnDateRow, 'yyyy/MM/dd').split('T')[0];
     const isReturned = faker.datatype.boolean();
     const loan = loanRepo.create({
       user,

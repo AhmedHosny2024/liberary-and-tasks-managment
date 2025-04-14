@@ -50,9 +50,9 @@ const isActiveLink = (routePath) => {
                 >Library</RouterLink
               >
               <RouterLink
-                to="/library/top"
+                to="/library/top-books"
                 :class="[
-                  isActiveLink('/jobs/add')
+                  isActiveLink('/library/top-books')
                     ? 'bg-green-900'
                     : 'hover:bg-gray-900 hover:text-white',
                   'text-white',

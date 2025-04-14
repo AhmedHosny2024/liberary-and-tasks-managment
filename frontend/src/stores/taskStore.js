@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useTaskStore = defineStore('taskStore', {
   state: () => ({
     tasks: [],
+    loans: [],
   }),
   actions: {
     setTasks(newTasks) {
@@ -27,5 +28,35 @@ export const useTaskStore = defineStore('taskStore', {
     removeTask(id) {
       this.tasks = this.tasks.filter(t => t.id !== id)
     },
+
+
+
+    setLoans(newLoans) {
+      this.loans = newLoans
+    },
+    addLoan(newLoan) {
+      this.loans.push(newLoan)
+    },
+    removeLoan(id) {
+      console.log('removeLoan', id)
+      const index = this.loans.findIndex(l => l.loan_id === id)
+      if (index !== -1) {
+        this.loans.splice(index, 1)
+      }
+    },
+    updateLoan(id, updatedData) {
+      const index = this.loans.findIndex(l => l.id === id)
+      if (index !== -1) {
+        const updatedLoan = { ...this.loans[index], ...updatedData }
+        this.loans.splice(index, 1, updatedLoan)
+      }
+    },
+    updateLoanStatus(id, status) {
+      const index = this.loans.findIndex(l => l.id === id)
+      if (index !== -1) {
+        this.loans[index].isReturned = status
+      }
+    },
+
   },
 })

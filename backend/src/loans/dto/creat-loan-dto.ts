@@ -1,4 +1,4 @@
-import { IsInt, IsOptional } from 'class-validator';
+import { IsDate, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateLoanDto {
@@ -10,6 +10,6 @@ export class CreateLoanDto {
   @Type(() => Number)
   book_id: number;
 
-  @IsOptional()
+  @IsDate()
   returnDate?: Date;
 }

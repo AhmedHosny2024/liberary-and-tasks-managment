@@ -37,10 +37,17 @@ export class LoansController {
     @Query('limit') limit: string,
     @Query('isReturned') status: string | null | undefined,
   ): Promise<TotalLoansDto> {
+    console.log('status', status);
     return this.loanService.findAll(
       parseInt(page, 10) || 1,
       parseInt(limit, 10) || 10,
-      status ? status === 'true' : null,
+      status
+        ? status === 'true'
+          ? true
+          : status === 'false'
+            ? false
+            : null
+        : null,
     );
   }
 

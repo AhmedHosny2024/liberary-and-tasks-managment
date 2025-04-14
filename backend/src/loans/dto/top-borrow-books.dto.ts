@@ -1,5 +1,6 @@
+import { Book } from '../../books/entity/book.entity';
+
 export type TopBorrowBooksDto = {
   id: number;
-  title: string;
-  borrowCount: number;
+  book: Book;
 };
