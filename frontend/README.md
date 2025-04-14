@@ -36,6 +36,11 @@
   <img src ='images/addTask.png' width='300' height='200' alt='add_task'/>
 
 ## Project Setup
+- environment variables
+  - create a file named `.env` in the root directory and add the following variables:
+```bash
+VITE_API_URL = "http://localhost:8000/"
+```
 
 ```sh
 npm install
