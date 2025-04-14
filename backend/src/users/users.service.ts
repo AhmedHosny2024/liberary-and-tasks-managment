@@ -96,6 +96,19 @@ export class UsersService {
     this.logger.log(`Request ID: ${request_id} - Delete user with ID: ${id}`);
     try {
       const startTime = Date.now();
+      const user = await this.userRepo.findOne({
+        where: { id },
+        relations: ['loans'],
+      });
+      if (!user) {
+        this.logger.warn(`Request ID: ${request_id} - User not found`);
+        throw new NotFoundException(`User not found`);
+      }
+      // Check if the user has any active loans
+      if (user.loans?.length > 0) {
+        this.logger.warn(`Request ID: ${request_id} - User has active loans`);
+        throw new BadRequestException(`User has active loans`);
+      }
       const res = await this.userRepo.delete(id);
       if (!res.affected) {
         throw new NotFoundException(`User not found`);

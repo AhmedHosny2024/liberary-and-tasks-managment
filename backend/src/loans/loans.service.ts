@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { Repository } from 'typeorm';
 import { Loan } from './entity/loan.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateLoanDto } from './dto/creat-loan-dto';
+import { CreateLoanDto } from './dto/create-loan-dto';
 import { BooksService } from '../books/books.service';
 import { UsersService } from '../users/users.service';
 import { TotalLoansDto } from './dto/total-loans';
@@ -48,6 +48,8 @@ export class LoansService {
          *SELECT 
             b.id, 
             b.title, 
+            b.author,
+            b.publishedDate,
             COUNT(l.loan_id) AS borrow_count
           FROM 
             loan l
@@ -87,7 +89,8 @@ export class LoansService {
       const startTime = Date.now();
       const user = await this.userService.findOne(dto.user_id);
       const book = await this.bookService.findOne(dto.book_id);
-
+      // here i assume we have many copies of the book so many users can borrow the same book at the same time
+      // if each book have only one version so we need to check first if it currently borrowed or not
       if (!user || !book) {
         throw new BadRequestException('User or Book not found');
       }

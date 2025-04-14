@@ -19,7 +19,7 @@ import { Task } from './tasks/entity/tasks.entity';
       envFilePath: join(__dirname, '..', '.env'),
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql', // Use 'mysql' for MySQL
+      type: 'mysql',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT, 10),
       username: process.env.DATABASE_USERNAME,

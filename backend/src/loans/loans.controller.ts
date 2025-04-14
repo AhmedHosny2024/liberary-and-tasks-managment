@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { LoansService } from './loans.service';
-import { CreateLoanDto } from './dto/creat-loan-dto';
+import { CreateLoanDto } from './dto/create-loan-dto';
 import { Loan } from './entity/loan.entity';
 import { TotalLoansDto } from './dto/total-loans';
 

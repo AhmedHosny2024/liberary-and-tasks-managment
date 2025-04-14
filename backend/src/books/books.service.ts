@@ -93,6 +93,16 @@ export class BooksService {
     this.logger.log(`Request ID: ${request_id} - Delete book with ID: ${id}`);
     try {
       const startTime = Date.now();
+      const book = await this.bookRepo.findOne({
+        where: { id },
+        relations: ['loans'],
+      });
+      if (!book) {
+        throw new NotFoundException(`Book with ID ${id} not found`);
+      }
+      if (book.loans?.length > 0) {
+        throw new BadRequestException(`Book with ID ${id} has active loans`);
+      }
       await this.bookRepo.delete(id);
       this.logger.log(
         `Request ID: ${request_id} - Book deleted with time taken: ${Date.now() - startTime}ms`,
