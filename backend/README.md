@@ -32,3 +32,4 @@ npm install
 npm run seeds
 npm start
 ```
+* Visit ```http://localhost:8000/docs#/``` to view the API documentation. 
