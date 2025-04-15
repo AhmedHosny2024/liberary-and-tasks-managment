@@ -13,12 +13,26 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './entity/tasks.entity';
 import { TotalTasksDto } from './dto/total-tasks.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse } from '@nestjs/swagger/dist/decorators';
+import { ApiOperation } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
 
+@ApiTags('Tasks')
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new task' })
+  @ApiResponse({
+    status: 201,
+    description: 'Task created successfully',
+    type: Task,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     try {
       const res = await this.tasksService.createTask(createTaskDto);
@@ -29,6 +43,15 @@ export class TasksController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all tasks' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tasks fetched successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   async getTasks(
     @Query('page') page: string,
     @Query('limit') limit: string,
@@ -54,6 +77,15 @@ export class TasksController {
   }
 
   @Patch(':id/complete')
+  @ApiOperation({ summary: 'Mark task as complete' })
+  @ApiResponse({
+    status: 200,
+    description: 'Task marked as complete successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   async markTaskAsComplete(@Param('id') id: number): Promise<Task> {
     try {
       const res = await this.tasksService.markTaskAsComplete(id);
@@ -63,6 +95,15 @@ export class TasksController {
     }
   }
   @Patch(`:id`)
+  @ApiOperation({ summary: 'Update task' })
+  @ApiResponse({
+    status: 200,
+    description: 'Task updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   async updateTask(
     @Param('id') id: string,
     @Body() updateTaskDto: Partial<CreateTaskDto>,
@@ -76,6 +117,15 @@ export class TasksController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete task' })
+  @ApiResponse({
+    status: 200,
+    description: 'Task deleted successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+  })
   async deleteTask(@Param('id') id: number): Promise<void> {
     try {
       await this.tasksService.deleteTask(id);
